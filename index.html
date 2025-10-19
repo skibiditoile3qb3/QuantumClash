@@ -7,16 +7,55 @@
   <link rel="stylesheet" href="menu/style.css">
 </head>
 <body>
-  <div id="menu">
-    <h1> QUANTUM CLASH </h1>
-    <button id="playBtn" class="mainmenu">▶ Play / Matchmake</button>
-    <button id="deckBtn" class="mainmenu">🃏 Deck</button>
-    <button id="shopBtn" class="mainmenu">Shop</button>
-    <button id="passBtn" class="mainmenu"> Battle Pass / Rewards</button>
-    <button id="settingsBtn" class="mainmenu">⚙️ Settings</button>
+  <div id="logoSplash">
+    <img src="menu/Quantum Clash.png" alt="Quantum Clash">
   </div>
 
-  <div id="content"></div>
+  <div id="mainContainer">
+    <div id="hoverPanel">
+      <div class="hover-label">Hover to show menu</div>
+      <div id="hoverMenu">
+        <button class="hover-menu-btn">
+          <div class="icon"></div>
+          <div>Deck</div>
+        </button>
+        <button class="hover-menu-btn">
+          <div class="icon"></div>
+          <div>Battle Pass</div>
+        </button>
+        <button class="hover-menu-btn">
+          <div class="icon"></div>
+          <div>Shop</div>
+        </button>
+        <button class="hover-menu-btn">
+          <div class="icon"></div>
+          <div>Rewards</div>
+        </button>
+      </div>
+    </div>
+
+    <button id="settingsBtn">
+      <div class="icon">⚙️</div>
+      <div>Settings</div>
+    </button>
+
+    <button id="mapBtn">
+      <div class="icon"></div>
+      <div>Map</div>
+    </button>
+
+    <button id="battleBtn">BATTLE</button>
+
+    <div id="gamemodesContainer">
+      <button id="gamemodesBtn"> Gamemodes</button>
+      <div id="gamemodesDropdown">
+        <button class="gamemode-option">AI Battle</button>
+        <button class="gamemode-option">🌐 Online</button>
+        <button class="gamemode-option">Solo Mode</button>
+        <button class="gamemode-option">Practice</button>
+      </div>
+    </div>
+  </div>
 
   <script src="menu/main.js"></script>
 </body>
