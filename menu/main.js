@@ -1,7 +1,7 @@
 const gamemodeBtn = document.getElementById("gamemodesBtn");
 const dropdown = document.getElementById("gamemodesDropdown");
 const gamemodeOptions = document.querySelectorAll(".gamemode-option");
-let selectedMode = "🌐 Online";
+let selectedMode = "Online";
 gamemodeBtn.textContent = selectedMode;
 gamemodeBtn.addEventListener("click", () => {
   dropdown.classList.toggle("show");
