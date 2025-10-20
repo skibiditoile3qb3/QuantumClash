@@ -38,5 +38,9 @@ battleBtn.addEventListener("click", () => {
       </div>
     `;
     mainContainer.style.opacity = "1";
+
+    setTimeout(() => {
+      mainContainer.innerHTML = "";
+    }, 2500); 
   }, 600);
 });
