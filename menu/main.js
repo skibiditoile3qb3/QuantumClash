@@ -1,4 +1,7 @@
-const gamemode = document.getElementById("gamemodesBtn")
-gamemode.onclick = function() {
-  alert("Button Clicked!");
-};
+const gamemodeBtn = document.getElementById("gamemodesBtn");
+const dropdown = document.getElementById("gamemodesDropdown");
+
+gamemodeBtn.addEventListener("click", () => {
+  dropdown.classList.toggle("show");
+});
+
