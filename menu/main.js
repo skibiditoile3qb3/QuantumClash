@@ -38,9 +38,32 @@ battleBtn.addEventListener("click", () => {
       </div>
     `;
     mainContainer.style.opacity = "1";
-
+    
     setTimeout(() => {
-      mainContainer.innerHTML = "";
+      mainContainer.innerHTML = `
+        <div id="gameContainer">
+          <div id="gameStats">
+            <div class="stat-row">
+              <span>Black: <strong id="blackCount">32</strong></span>
+              <span>White: <strong id="whiteCount">32</strong></span>
+            </div>
+            <div class="stat-row">
+              <span>Moves: <strong id="movesRemaining">50</strong></span>
+              <span>Mana: <strong id="playerMana">50</strong></span>
+            </div>
+          </div>
+          <canvas id="gameBoard"></canvas>
+        </div>
+      `;
+
+      const game = new QuantumClash(8);
+      game.initTestBoard();
+      
+      const renderer = new BoardRenderer(game, 'gameBoard');
+      renderer.render();
+      renderer.updateUI();
+      
+      mainContainer.style.opacity = "1";
     }, 2500); 
   }, 600);
 });
