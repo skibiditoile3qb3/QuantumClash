@@ -1,12 +1,13 @@
-//game logic
+// game.js - game logic
 
 class QuantumClash {
   constructor(gridSize = 8) {
     this.gridSize = gridSize;
     this.totalTiles = gridSize * gridSize;
-
+    
     // color: 0 = black, 1 = white
     this.board = Array(this.totalTiles).fill(null).map(() => [0, 0]);
+    
 
     this.currentTurn = 0;
     this.playerMana = 50;
@@ -14,7 +15,7 @@ class QuantumClash {
     this.maxMoves = 50;
     this.movesRemaining = 50;
     
-//mapping
+
     this.objectIDs = {
       QUANTUM: 1,
       MANA_TILE: 2,
@@ -33,6 +34,8 @@ class QuantumClash {
       SHADOW_WRAITH: 21
     };
   }
+  
+
   getTile(x, y) {
     if (x < 0 || x >= this.gridSize || y < 0 || y >= this.gridSize) {
       return null;
@@ -41,6 +44,7 @@ class QuantumClash {
     return this.board[index];
   }
   
+
   setTile(x, y, tileData) {
     if (x < 0 || x >= this.gridSize || y < 0 || y >= this.gridSize) {
       return false;
@@ -49,22 +53,27 @@ class QuantumClash {
     this.board[index] = tileData;
     return true;
   }
+  
+
   flipTileColor(x, y) {
     const tile = this.getTile(x, y);
     if (!tile) return false;
     
+
     const hasLock = tile.slice(2).includes(this.objectIDs.LOCKED);
     if (hasLock) {
-      // Remove lock on first flip
+
       this.removeTileObject(x, y, this.objectIDs.LOCKED);
       return true;
     }
     
+    // Flip color: 0 -> 1, 1 -> 0
     tile[0] = tile[0] === 0 ? 1 : 0;
     this.setTile(x, y, tile);
     return true;
   }
   
+
   flipCross(x, y) {
     const positions = [
       [x, y],           // center
@@ -81,24 +90,26 @@ class QuantumClash {
     this.movesRemaining--;
   }
   
+
   addTileObject(x, y, objectID) {
     const tile = this.getTile(x, y);
     if (!tile) return false;
     
     tile[1]++;
-    tile.push(objectID); 
+    tile.push(objectID); // Add object ID
     this.setTile(x, y, tile);
     return true;
   }
   
+
   removeTileObject(x, y, objectID) {
     const tile = this.getTile(x, y);
     if (!tile) return false;
     
-    const objIndex = tile.indexOf(objectID, 2);
+    const objIndex = tile.indexOf(objectID, 2); // Start search after count
     if (objIndex !== -1) {
       tile.splice(objIndex, 1);
-      tile[1]--; 
+      tile[1]--;
       this.setTile(x, y, tile);
       return true;
     }
@@ -115,7 +126,6 @@ class QuantumClash {
   }
   
 
-}
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = QuantumClash;
 }
