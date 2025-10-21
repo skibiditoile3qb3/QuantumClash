@@ -124,7 +124,19 @@ class QuantumClash {
     });
     return { black, white };
   }
+  initSplitBoard() {
+  const halfPoint = Math.floor(this.gridSize / 2);
   
+  for (let y = 0; y < this.gridSize; y++) {
+    for (let x = 0; x < this.gridSize; x++) {
+      if (y < halfPoint) {
+        this.setTile(x, y, [0, 0]);
+      } else {
+        this.setTile(x, y, [1, 0]);
+      }
+    }
+  }
+}
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = QuantumClash;
