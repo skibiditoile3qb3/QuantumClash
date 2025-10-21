@@ -126,17 +126,22 @@ class QuantumClash {
   }
   initSplitBoard() {
   const halfPoint = Math.floor(this.gridSize / 2);
-  
+  this.playerColor = Math.random() < 0.5 ? 0 : 1;
+  const enemyColor = this.playerColor === 0 ? 1 : 0;
+
   for (let y = 0; y < this.gridSize; y++) {
     for (let x = 0; x < this.gridSize; x++) {
       if (y < halfPoint) {
-        this.setTile(x, y, [0, 0]);
+        this.setTile(x, y, [enemyColor, 0]);
       } else {
-        this.setTile(x, y, [1, 0]);
+        this.setTile(x, y, [this.playerColor, 0]);
       }
     }
   }
+
+  console.log(`You are ${this.playerColor === 0 ? "Black" : "White"}`);
 }
+
 }
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = QuantumClash;
