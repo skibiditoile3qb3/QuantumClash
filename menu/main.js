@@ -56,8 +56,8 @@ battleBtn.addEventListener("click", () => {
         </div>
       `;
 
-      const game = new QuantumClash(8);
-      game.initTestBoard();
+     const game = new QuantumClash(8);
+     game.initSplitBoard(); 
       
       const renderer = new BoardRenderer(game, 'gameBoard');
       renderer.render();
