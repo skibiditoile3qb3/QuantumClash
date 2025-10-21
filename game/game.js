@@ -137,7 +137,7 @@ class QuantumClash {
     }
   }
 }
-
+}
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = QuantumClash;
 }
