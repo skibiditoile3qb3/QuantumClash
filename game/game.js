@@ -114,12 +114,7 @@ class QuantumClash {
     return { black, white };
   }
   
-  initTestBoard() {
-    this.addTileObject(2, 2, this.objectIDs.KNIGHT);
-    this.addTileObject(5, 5, this.objectIDs.MANA_TILE);
-    this.setTile(3, 3, [1, 2, this.objectIDs.KNIGHT, this.objectIDs.MANA_TILE]); // white tile with 2 objects
-    this.setTile(4, 4, [0, 1, this.objectIDs.QUANTUM]); // quantum tile
-  }
+
 }
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = QuantumClash;
