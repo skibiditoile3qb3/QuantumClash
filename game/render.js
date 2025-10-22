@@ -231,13 +231,13 @@ calculateTileSize() {
   const baseGridSize = 8;
   this.tileSize = Math.floor(baseSize * (baseGridSize / this.game.gridSize));
 }
-  updateUI() {
-    const counts = this.game.countTiles();
-    document.getElementById('blackCount').textContent = counts.black;
-    document.getElementById('whiteCount').textContent = counts.white;
-    document.getElementById('movesRemaining').textContent = this.game.movesRemaining;
-    document.getElementById('playerMana').textContent = this.game.playerMana;
-  }
+updateUI() {
+  document.getElementById('movesRemaining').textContent = this.game.movesRemaining;
+  document.getElementById('manaText').textContent = this.game.playerMana;
+  
+  const manaPercent = (this.game.playerMana / 100) * 100;
+  document.getElementById('manaFill').style.width = `${manaPercent}%`;
+}
 }
 
 if (typeof module !== 'undefined' && module.exports) {
