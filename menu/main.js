@@ -40,21 +40,19 @@ battleBtn.addEventListener("click", () => {
     mainContainer.style.opacity = "1";
     
     setTimeout(() => {
-      mainContainer.innerHTML = `
-        <div id="gameContainer">
-          <div id="gameStats">
-            <div class="stat-row">
-              <span>Black: <strong id="blackCount">32</strong></span>
-              <span>White: <strong id="whiteCount">32</strong></span>
-            </div>
-            <div class="stat-row">
-              <span>Moves: <strong id="movesRemaining">50</strong></span>
-              <span>Mana: <strong id="playerMana">50</strong></span>
-            </div>
-          </div>
-          <canvas id="gameBoard"></canvas>
-        </div>
-      `;
+mainContainer.innerHTML = `
+  <div id="gameContainer">
+    <div id="moveCounter">
+      <div class="clock-icon">⏱️</div>
+      <span id="movesRemaining">50</span>
+    </div>
+    <canvas id="gameBoard"></canvas>
+    <div id="manaBar">
+      <div id="manaFill"></div>
+      <span id="manaText">50</span>
+    </div>
+  </div>
+`;
     
    function getCookie(name) {
   const cookies = document.cookie.split(";").map(c => c.trim());
