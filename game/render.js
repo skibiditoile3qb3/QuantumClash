@@ -6,7 +6,7 @@ class BoardRenderer {
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext('2d');
     
-    this.tileSize = 60;
+    this.calculateTileSize();
     this.padding = 4;
     this.canvas.width = (this.tileSize + this.padding) * game.gridSize + this.padding;
     this.canvas.height = (this.tileSize + this.padding) * game.gridSize + this.padding;
@@ -226,6 +226,11 @@ class BoardRenderer {
     }
   }
   
+  calculateTileSize() {
+  const baseSize = 70;
+  const baseGridSize = 8;
+  return Math.floor(baseSize * (baseGridSize / this.game.gridSize));
+}
   updateUI() {
     const counts = this.game.countTiles();
     document.getElementById('blackCount').textContent = counts.black;
