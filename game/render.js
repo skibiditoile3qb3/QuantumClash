@@ -6,7 +6,7 @@ class BoardRenderer {
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext('2d');
     
-    this.tileSize = 70;
+    this.tileSize = 60;
     this.padding = 4;
     this.canvas.width = (this.tileSize + this.padding) * game.gridSize + this.padding;
     this.canvas.height = (this.tileSize + this.padding) * game.gridSize + this.padding;
