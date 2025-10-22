@@ -226,10 +226,10 @@ class BoardRenderer {
     }
   }
   
-  calculateTileSize() {
+calculateTileSize() {
   const baseSize = 70;
   const baseGridSize = 8;
-  return Math.floor(baseSize * (baseGridSize / this.game.gridSize));
+  this.tileSize = Math.floor(baseSize * (baseGridSize / this.game.gridSize));
 }
   updateUI() {
     const counts = this.game.countTiles();
