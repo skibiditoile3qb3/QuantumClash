@@ -229,7 +229,7 @@ class BoardRenderer {
 calculateTileSize() {
   const baseSize = 70;
   const baseGridSize = 8;
-  this.tileSize = Math.floor(baseSize * ((baseGridSize / this.game.gridSize)/2));
+  this.tileSize = Math.floor(baseSize * ((baseGridSize / this.game.gridSize)/1.3));
 }
 updateUI() {
   document.getElementById('movesRemaining').textContent = this.game.movesRemaining;
