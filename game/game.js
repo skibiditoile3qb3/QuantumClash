@@ -74,21 +74,24 @@ class QuantumClash {
   }
   
 
-  flipCross(x, y) {
-    const positions = [
-      [x, y],           // center
-      [x, y - 1],       // top
-      [x, y + 1],       // bottom
-      [x - 1, y],       // left
-      [x + 1, y]        // right
-    ];
-    
-    positions.forEach(([px, py]) => {
-      this.flipTileColor(px, py);
-    });
-    
-    this.movesRemaining--;
-  }
+flipCross(x, y) {
+  const positions = [
+    [x, y],           // center
+    [x, y - 1],       // top
+    [x, y + 1],       // bottom
+    [x - 1, y],       // left
+    [x + 1, y]        // right
+  ];
+  
+  positions.forEach(([px, py]) => {
+    this.flipTileColor(px, py);
+  });
+  
+  this.movesRemaining--;
+  
+  // Add 5 mana per turn
+  this.playerMana = Math.min(this.playerMana + 5, 100);
+}
   
 
   addTileObject(x, y, objectID) {
