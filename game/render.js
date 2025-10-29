@@ -32,6 +32,7 @@ class BoardRenderer {
     this.setupEvents();
     this.startAnimation();
   }
+  
   startAnimation() {
     const animate = () => {
       this.animationFrame++;
@@ -64,33 +65,26 @@ class BoardRenderer {
       this.hoveredTile = null;
     });
     
-  this.canvas.addEventListener('click', (e) => {
-  if (isAITurn) return;
-  
-  const rect = this.canvas.getBoundingClientRect();
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
-  
-  const tile = this.getTileFromMouse(mouseX, mouseY);
-  if (tile) {
-    this.game.flipCross(tile.x, tile.y);
-    this.updateUI();
-    
-    if (isAIGame && ai && !isAITurn) {
-      isAITurn = true;
-      ai.makeMove((x, y) => {
-        this.game.flipCross(x, y);
-        this.updateUI();
-        isAITurn = false;
-      });
-    }
-  }
-});
+    this.canvas.addEventListener('click', (e) => {
+      if (isAITurn) return;
+      
+      const rect = this.canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
       
       const tile = this.getTileFromMouse(mouseX, mouseY);
       if (tile) {
         this.game.flipCross(tile.x, tile.y);
         this.updateUI();
+        
+        if (isAIGame && ai && !isAITurn) {
+          isAITurn = true;
+          ai.makeMove((x, y) => {
+            this.game.flipCross(x, y);
+            this.updateUI();
+            isAITurn = false;
+          });
+        }
       }
     });
   }
@@ -178,6 +172,7 @@ class BoardRenderer {
       this.ctx.fillStyle = `rgba(0, 212, 255, ${pulse * 0.3})`;
       this.ctx.fill();
     }
+    
     if (hasLock) {
       const centerX = screenX + this.tileSize / 2;
       const centerY = screenY + this.tileSize / 2;
@@ -206,6 +201,7 @@ class BoardRenderer {
       this.ctx.fill();
       this.ctx.fillRect(centerX - 1, centerY + 1, 2, 4);
     }
+    
     this.ctx.strokeStyle = borderColor;
     this.ctx.lineWidth = 2;
     this.roundRect(screenX, screenY, this.tileSize, this.tileSize, 6);
@@ -244,18 +240,19 @@ class BoardRenderer {
     }
   }
   
-calculateTileSize() {
-  const baseSize = 70;
-  const baseGridSize = 8;
-  this.tileSize = Math.floor(baseSize * ((baseGridSize / this.game.gridSize)/1.3));
-}
-updateUI() {
-  document.getElementById('movesRemaining').textContent = this.game.movesRemaining;
-  document.getElementById('manaText').textContent = this.game.playerMana;
+  calculateTileSize() {
+    const baseSize = 70;
+    const baseGridSize = 8;
+    this.tileSize = Math.floor(baseSize * ((baseGridSize / this.game.gridSize)/1.3));
+  }
   
-  const manaPercent = (this.game.playerMana / 100) * 100;
-  document.getElementById('manaFill').style.width = `${manaPercent}%`;
-}
+  updateUI() {
+    document.getElementById('movesRemaining').textContent = this.game.movesRemaining;
+    document.getElementById('manaText').textContent = this.game.playerMana;
+    
+    const manaPercent = (this.game.playerMana / 100) * 100;
+    document.getElementById('manaFill').style.width = `${manaPercent}%`;
+  }
 }
 
 if (typeof module !== 'undefined' && module.exports) {
