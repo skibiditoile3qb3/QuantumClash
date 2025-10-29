@@ -1,24 +1,15 @@
-// game.js - game logic
-
 class QuantumClash {
   constructor(gridSize = 8, moveLimit = 50) {
     this.gridSize = gridSize;
     this.totalTiles = gridSize * gridSize;
-    
-    // color: 0 = black, 1 = white
     this.board = Array(this.totalTiles).fill(null).map(() => [0, 0]);
     
-    let aiDifficulty = 'medium';
-    let isAIGame = false;
-    let ai = null;
-    let isAITurn = false;
     this.currentTurn = 0;
     this.playerMana = 50;
     this.opponentMana = 50;
     this.maxMoves = moveLimit;
-    this.movesRemaining = 50;
+    this.movesRemaining = moveLimit;
     
-
     this.objectIDs = {
       QUANTUM: 1,
       MANA_TILE: 2,
@@ -38,7 +29,6 @@ class QuantumClash {
     };
   }
   
-
   getTile(x, y) {
     if (x < 0 || x >= this.gridSize || y < 0 || y >= this.gridSize) {
       return null;
@@ -47,7 +37,6 @@ class QuantumClash {
     return this.board[index];
   }
   
-
   setTile(x, y, tileData) {
     if (x < 0 || x >= this.gridSize || y < 0 || y >= this.gridSize) {
       return false;
@@ -57,62 +46,53 @@ class QuantumClash {
     return true;
   }
   
-
   flipTileColor(x, y) {
     const tile = this.getTile(x, y);
     if (!tile) return false;
     
-
     const hasLock = tile.slice(2).includes(this.objectIDs.LOCKED);
     if (hasLock) {
-
       this.removeTileObject(x, y, this.objectIDs.LOCKED);
       return true;
     }
     
-    // Flip color: 0 -> 1, 1 -> 0
     tile[0] = tile[0] === 0 ? 1 : 0;
     this.setTile(x, y, tile);
     return true;
   }
   
-
-flipCross(x, y) {
-  const positions = [
-    [x, y],           // center
-    [x, y - 1],       // top
-    [x, y + 1],       // bottom
-    [x - 1, y],       // left
-    [x + 1, y]        // right
-  ];
+  flipCross(x, y) {
+    const positions = [
+      [x, y],
+      [x, y - 1],
+      [x, y + 1],
+      [x - 1, y],
+      [x + 1, y]
+    ];
+    
+    positions.forEach(([px, py]) => {
+      this.flipTileColor(px, py);
+    });
+    
+    this.movesRemaining--;
+    this.playerMana = Math.min(this.playerMana + 5, 100);
+  }
   
-  positions.forEach(([px, py]) => {
-    this.flipTileColor(px, py);
-  });
-  
-  this.movesRemaining--;
-  
-  // Add 5 mana per turn
-  this.playerMana = Math.min(this.playerMana + 5, 100);
-}
-  
-
   addTileObject(x, y, objectID) {
     const tile = this.getTile(x, y);
     if (!tile) return false;
     
     tile[1]++;
-    tile.push(objectID); // Add object ID
+    tile.push(objectID);
     this.setTile(x, y, tile);
     return true;
   }
   
-
   removeTileObject(x, y, objectID) {
     const tile = this.getTile(x, y);
     if (!tile) return false;
     
-    const objIndex = tile.indexOf(objectID, 2); // Start search after count
+    const objIndex = tile.indexOf(objectID, 2);
     if (objIndex !== -1) {
       tile.splice(objIndex, 1);
       tile[1]--;
@@ -121,7 +101,7 @@ flipCross(x, y) {
     }
     return false;
   }
-
+  
   countTiles() {
     let black = 0, white = 0;
     this.board.forEach(tile => {
@@ -130,40 +110,24 @@ flipCross(x, y) {
     });
     return { black, white };
   }
+  
   initSplitBoard() {
-  const halfPoint = Math.floor(this.gridSize / 2);
-  this.playerColor = Math.random() < 0.5 ? 0 : 1;
-  const enemyColor = this.playerColor === 0 ? 1 : 0;
-
-  for (let y = 0; y < this.gridSize; y++) {
-    for (let x = 0; x < this.gridSize; x++) {
-      if (y < halfPoint) {
-        this.setTile(x, y, [enemyColor, 0]);
-      } else {
-        this.setTile(x, y, [this.playerColor, 0]);
+    const halfPoint = Math.floor(this.gridSize / 2);
+    this.playerColor = Math.random() < 0.5 ? 0 : 1;
+    const enemyColor = this.playerColor === 0 ? 1 : 0;
+    for (let y = 0; y < this.gridSize; y++) {
+      for (let x = 0; x < this.gridSize; x++) {
+        if (y < halfPoint) {
+          this.setTile(x, y, [enemyColor, 0]);
+        } else {
+          this.setTile(x, y, [this.playerColor, 0]);
+        }
       }
     }
-  }
-
-  console.log(`You are ${this.playerColor === 0 ? "Black" : "White"}`);
-}
-
-
-function setAIDifficulty(difficulty) {
-  aiDifficulty = difficulty;
-  if (document.cookie.indexOf('aiDifficulty=') === -1) {
-    document.cookie = `aiDifficulty=${difficulty}; path=/; max-age=31536000`;
-  } else {
-    document.cookie = `aiDifficulty=${difficulty}; path=/; max-age=31536000`;
+    console.log(`You are ${this.playerColor === 0 ? "Black" : "White"}`);
   }
 }
 
-function getAIDifficulty() {
-  const difficulty = getCookie('aiDifficulty');
-  return difficulty || 'medium';
-}
-  
-}
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = QuantumClash;
 }
