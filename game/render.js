@@ -64,10 +64,28 @@ class BoardRenderer {
       this.hoveredTile = null;
     });
     
-    this.canvas.addEventListener('click', (e) => {
-      const rect = this.canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
+  this.canvas.addEventListener('click', (e) => {
+  if (isAITurn) return;
+  
+  const rect = this.canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+  
+  const tile = this.getTileFromMouse(mouseX, mouseY);
+  if (tile) {
+    this.game.flipCross(tile.x, tile.y);
+    this.updateUI();
+    
+    if (isAIGame && ai && !isAITurn) {
+      isAITurn = true;
+      ai.makeMove((x, y) => {
+        this.game.flipCross(x, y);
+        this.updateUI();
+        isAITurn = false;
+      });
+    }
+  }
+});
       
       const tile = this.getTileFromMouse(mouseX, mouseY);
       if (tile) {
