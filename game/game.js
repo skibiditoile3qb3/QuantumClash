@@ -8,7 +8,10 @@ class QuantumClash {
     // color: 0 = black, 1 = white
     this.board = Array(this.totalTiles).fill(null).map(() => [0, 0]);
     
-
+    let aiDifficulty = 'medium';
+    let isAIGame = false;
+    let ai = null;
+    let isAITurn = false;
     this.currentTurn = 0;
     this.playerMana = 50;
     this.opponentMana = 50;
@@ -145,6 +148,21 @@ flipCross(x, y) {
   console.log(`You are ${this.playerColor === 0 ? "Black" : "White"}`);
 }
 
+
+function setAIDifficulty(difficulty) {
+  aiDifficulty = difficulty;
+  if (document.cookie.indexOf('aiDifficulty=') === -1) {
+    document.cookie = `aiDifficulty=${difficulty}; path=/; max-age=31536000`;
+  } else {
+    document.cookie = `aiDifficulty=${difficulty}; path=/; max-age=31536000`;
+  }
+}
+
+function getAIDifficulty() {
+  const difficulty = getCookie('aiDifficulty');
+  return difficulty || 'medium';
+}
+  
 }
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = QuantumClash;
