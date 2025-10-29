@@ -1,7 +1,7 @@
 // game.js - game logic
 
 class QuantumClash {
-  constructor(gridSize = 8) {
+  constructor(gridSize = 8, moveLimit = 50) {
     this.gridSize = gridSize;
     this.totalTiles = gridSize * gridSize;
     
@@ -12,7 +12,7 @@ class QuantumClash {
     this.currentTurn = 0;
     this.playerMana = 50;
     this.opponentMana = 50;
-    this.maxMoves = 50;
+    this.maxMoves = moveLimit;
     this.movesRemaining = 50;
     
 
