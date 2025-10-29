@@ -6,9 +6,7 @@ const mainContainer = document.getElementById("mainContainer");
 const settingsBtn = document.getElementById("settingsBtn");
 
 let selectedMode = "Online";
-let isAIGame = false;
-let ai = null;
-let isAITurn = false;
+
 
 gamemodeBtn.textContent = selectedMode;
 
