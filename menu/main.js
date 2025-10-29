@@ -77,6 +77,7 @@ const tierData = {
 
       const tier = parseInt(getCookie("tier") || "1");
       const currentTier = tierData[tier] || tierData[1];
+      const movelim = currentTier.moves;
       console.log(`Current Tier: ${currentTier.name}`);
 
 
