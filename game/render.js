@@ -33,14 +33,35 @@ class BoardRenderer {
     this.startAnimation();
   }
   
-  startAnimation() {
-    const animate = () => {
-      this.animationFrame++;
-      this.render();
-      requestAnimationFrame(animate);
-    };
-    animate();
+  endGame() {
+  if (this.animationId) {
+    cancelAnimationFrame(this.animationId);
+    this.animationId = null;
   }
+
+  this.canvas.style.pointerEvents = 'none';
+
+  this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+  this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+  this.ctx.fillStyle = '#fff';
+  this.ctx.font = 'bold 32px sans-serif';
+  this.ctx.textAlign = 'center';
+  this.ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2);
+
+  console.log('Game ended 🕹️');
+}
+
+    
+    
+startAnimation() {
+  const animate = () => {
+    this.animationFrame++;
+    this.render();
+    this.animationId = requestAnimationFrame(animate);
+  };
+  animate();
+}
 
   getTileFromMouse(mouseX, mouseY) {
     const x = Math.floor((mouseX - this.padding) / (this.tileSize + this.padding));
@@ -53,6 +74,12 @@ class BoardRenderer {
   }
 
   setupEvents() {
+    if (this.game.movesRemaining > 1){
+      this.endGame();
+      return;
+    }
+      
+    
     this.canvas.addEventListener('mousemove', (e) => {
       const rect = this.canvas.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
