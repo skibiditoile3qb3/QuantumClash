@@ -33,25 +33,32 @@ class BoardRenderer {
     this.startAnimation();
   }
   
-  endGame() {
+endGame() {
   if (this.animationId) {
     cancelAnimationFrame(this.animationId);
     this.animationId = null;
   }
 
   this.canvas.style.pointerEvents = 'none';
-
-  this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+  const counts = this.game.countTiles();
+  const playerCount = this.game.playerColor === 0 ? counts.black : counts.white;
+  const enemyCount = this.game.playerColor === 0 ? counts.white : counts.black;
+  const isVictory = playerCount > enemyCount;
+  this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
   this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-  this.ctx.fillStyle = '#fff';
-  this.ctx.font = 'bold 32px sans-serif';
+  this.ctx.fillStyle = isVictory ? '#00ff88' : '#ff0072';
+  this.ctx.font = 'bold 36px sans-serif';
   this.ctx.textAlign = 'center';
-  this.ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2);
+  this.ctx.fillText(isVictory ? 'VICTORY!' : 'DEFEAT', this.canvas.width / 2, this.canvas.height / 2 - 30);
+  
+  this.ctx.fillStyle = '#fff';
+  this.ctx.font = '20px sans-serif';
+  this.ctx.fillText(`You: ${playerCount} tiles`, this.canvas.width / 2, this.canvas.height / 2 + 10);
+  this.ctx.fillText(`Opponent: ${enemyCount} tiles`, this.canvas.width / 2, this.canvas.height / 2 + 40);
 
   console.log('Game ended 🕹️');
 }
-
     
     
 startAnimation() {
@@ -74,10 +81,6 @@ startAnimation() {
   }
 
   setupEvents() {
-    if (this.game.movesRemaining > 1){
-      this.endGame();
-      return;
-    }
       
     
     this.canvas.addEventListener('mousemove', (e) => {
@@ -104,14 +107,21 @@ startAnimation() {
         this.game.flipCross(tile.x, tile.y);
         this.updateUI();
         
-        if (isAIGame && ai && !isAITurn) {
-          isAITurn = true;
-          ai.makeMove((x, y) => {
-            this.game.flipCross(x, y);
-            this.updateUI();
-            isAITurn = false;
-          });
-        }
+      if (this.game.movesRemaining <= 0) {
+      this.endGame();
+      return;
+    }
+if (isAIGame && ai && !isAITurn) {
+  isAITurn = true;
+  ai.makeMove((x, y) => {
+    this.game.flipCross(x, y);
+    this.updateUI();
+    isAITurn = false;
+    if (this.game.movesRemaining <= 0) {
+      this.endGame();
+    }
+  });
+}
       }
     });
   }
