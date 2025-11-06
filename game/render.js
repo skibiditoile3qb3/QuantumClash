@@ -6,6 +6,7 @@ class BoardRenderer {
     this.canvas = document.getElementById(canvasId);
     this.ctx = this.canvas.getContext('2d');
     
+    this.gameEnded = false; // Add game ended flag
     this.calculateTileSize();
     this.padding = 4;
     this.canvas.width = (this.tileSize + this.padding) * game.gridSize + this.padding;
@@ -33,42 +34,40 @@ class BoardRenderer {
     this.startAnimation();
   }
   
-endGame() {
-  if (this.animationId) {
-    cancelAnimationFrame(this.animationId);
-    this.animationId = null;
+  endGame() {
+    this.gameEnded = true; // Set the flag
+    this.canvas.style.pointerEvents = 'none';
+    console.log('Game ended 🕹️');
   }
 
-  this.canvas.style.pointerEvents = 'none';
-  const counts = this.game.countTiles();
-  const playerCount = this.game.playerColor === 0 ? counts.black : counts.white;
-  const enemyCount = this.game.playerColor === 0 ? counts.white : counts.black;
-  const isVictory = playerCount > enemyCount;
-  this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-  this.ctx.fillStyle = isVictory ? '#00ff88' : '#ff0072';
-  this.ctx.font = 'bold 36px sans-serif';
-  this.ctx.textAlign = 'center';
-  this.ctx.fillText(isVictory ? 'VICTORY!' : 'DEFEAT', this.canvas.width / 2, this.canvas.height / 2 - 30);
-  
-  this.ctx.fillStyle = '#fff';
-  this.ctx.font = '20px sans-serif';
-  this.ctx.fillText(`You: ${playerCount} tiles`, this.canvas.width / 2, this.canvas.height / 2 + 10);
-  this.ctx.fillText(`Opponent: ${enemyCount} tiles`, this.canvas.width / 2, this.canvas.height / 2 + 40);
-
-  console.log('Game ended 🕹️');
-}
+  drawGameOverScreen() {
+    const counts = this.game.countTiles();
+    const playerCount = this.game.playerColor === 0 ? counts.black : counts.white;
+    const enemyCount = this.game.playerColor === 0 ? counts.white : counts.black;
+    const isVictory = playerCount > enemyCount;
     
+    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.ctx.fillStyle = isVictory ? '#00ff88' : '#ff0072';
+    this.ctx.font = 'bold 36px sans-serif';
+    this.ctx.textAlign = 'center';
+    this.ctx.fillText(isVictory ? 'VICTORY!' : 'DEFEAT', this.canvas.width / 2, this.canvas.height / 2 - 30);
     
-startAnimation() {
-  const animate = () => {
-    this.animationFrame++;
-    this.render();
-    this.animationId = requestAnimationFrame(animate);
-  };
-  animate();
-}
+    this.ctx.fillStyle = '#fff';
+    this.ctx.font = '20px sans-serif';
+    this.ctx.fillText(`You: ${playerCount} tiles`, this.canvas.width / 2, this.canvas.height / 2 + 10);
+    this.ctx.fillText(`Opponent: ${enemyCount} tiles`, this.canvas.width / 2, this.canvas.height / 2 + 40);
+  }
+    
+  startAnimation() {
+    const animate = () => {
+      this.animationFrame++;
+      this.render();
+      this.animationId = requestAnimationFrame(animate);
+    };
+    animate();
+  }
 
   getTileFromMouse(mouseX, mouseY) {
     const x = Math.floor((mouseX - this.padding) / (this.tileSize + this.padding));
@@ -81,8 +80,6 @@ startAnimation() {
   }
 
   setupEvents() {
-      
-    
     this.canvas.addEventListener('mousemove', (e) => {
       const rect = this.canvas.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
@@ -96,7 +93,7 @@ startAnimation() {
     });
     
     this.canvas.addEventListener('click', (e) => {
-      if (isAITurn) return;
+      if (isAITurn || this.gameEnded) return;
       
       const rect = this.canvas.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
@@ -107,21 +104,23 @@ startAnimation() {
         this.game.flipCross(tile.x, tile.y);
         this.updateUI();
         
-      if (this.game.movesRemaining <= 0) {
-      this.endGame();
-      return;
-    }
-if (isAIGame && ai && !isAITurn) {
-  isAITurn = true;
-  ai.makeMove((x, y) => {
-    this.game.flipCross(x, y);
-    this.updateUI();
-    isAITurn = false;
-    if (this.game.movesRemaining <= 0) {
-      this.endGame();
-    }
-  });
-}
+        if (this.game.movesRemaining <= 0) {
+          this.endGame();
+          return;
+        }
+
+        if (isAIGame && ai && !isAITurn) {
+          isAITurn = true;
+          ai.makeMove((x, y) => {
+            this.game.flipCross(x, y);
+            this.updateUI();
+            isAITurn = false;
+            
+            if (this.game.movesRemaining <= 0) {
+              this.endGame();
+            }
+          });
+        }
       }
     });
   }
@@ -274,6 +273,11 @@ if (isAIGame && ai && !isAITurn) {
       for (let x = 0; x < this.game.gridSize; x++) {
         this.drawTile(x, y);
       }
+    }
+    
+    // Draw game over screen if game has ended
+    if (this.gameEnded) {
+      this.drawGameOverScreen();
     }
   }
   
